@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { SocialIcon } from 'react-social-icons';
 import { getCart, getSocialUser, getUser } from '../apiCalls/services';
 import SocialButton from './SocialButton';
-import { enableLoginStatus, updateLoggedinCart } from '../redux/actions';
+import { enableLoginStatus, updateLoggedinCart, updateProfile } from '../redux/actions';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function Login() {
                 sessionStorage.setItem('user', JSON.stringify(res.data.responseData));
                 sessionStorage.setItem('token', JSON.stringify(res.data.token));
                 appendCart(user._profile.email);
-                console.log("updateing ccart")
+                dispatch(updateProfile());
                 navigate('/');
             }
         })
@@ -49,7 +49,7 @@ export default function Login() {
                     sessionStorage.setItem('user', JSON.stringify(res.data.responseData));
                     sessionStorage.setItem('token', JSON.stringify(res.data.token));
                     appendCart(inputDetails.email);
-                    console.log("updateing ccart")
+                    dispatch(updateProfile());
                     navigate('/');
                 }
             });

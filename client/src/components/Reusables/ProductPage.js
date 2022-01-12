@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Row, Button, Col, Container, Alert } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import Magnifier from "react-magnifier";
 import {
     EmailShareButton,
     FacebookShareButton,
@@ -14,7 +15,7 @@ import {
     TwitterIcon,
     RedditIcon
 } from 'react-share';
-import { getSpecificProducts } from '../../apiCalls/services';
+import { FrontEndPath, getSpecificProducts } from '../../apiCalls/services';
 import { updateCart, updateLoggedinCart } from '../../redux/actions';
 import Rating from './Rating';
 
@@ -49,7 +50,14 @@ export default function ProductPage() {
             if (cart != undefined) {
                 const duplicacy = cart.find(ele => ele._id == product._id);
                 if (!duplicacy) {
-                    let arr = [...cart, { ...product, quantity: 1 }];
+
+                    let arr = [...cart, {
+                        _id: product._id,
+                        product_image: product.product_image,
+                        product_name: product.product_name,
+                        product_cost: product.product_cost,
+                        quantity: 1
+                    }];
                     localStorage.setItem('cart', JSON.stringify(arr));
                     dispatch(updateCart());
                     setShow({ message: "Product Added to cart ", alert: true });
@@ -67,7 +75,13 @@ export default function ProductPage() {
             if (cart != undefined) {
                 const duplicacy = cart.find(ele => ele._id == product._id);
                 if (!duplicacy) {
-                    let arr = [...cart, { ...product, quantity: 1 }];
+                    let arr = [...cart, {
+                        _id: product._id,
+                        product_image: product.product_image,
+                        product_name: product.product_name,
+                        product_cost: product.product_cost,
+                        quantity: 1
+                    }];
                     sessionStorage.setItem('cart', JSON.stringify(arr));
                     dispatch(updateLoggedinCart());
                     setShow({ message: "Product Added to cart ", alert: true });
@@ -112,7 +126,7 @@ export default function ProductPage() {
                                 {/* //image */}
                                 <Row style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <p style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <img height="300px" src={`http://localhost:3000/images/products/${variable.focus}`} />
+                                        <Magnifier src={`${FrontEndPath}/images/products/${variable.focus}`} height="500px" />
                                     </p>
                                 </Row>
                                 <Row >
@@ -138,7 +152,7 @@ export default function ProductPage() {
                                 </Row>
                                 <Row className='my-2 '>
                                     <p >
-                                        <Rating productRating={product.product_rating} className='my-1' />
+                                        <Rating productRating={product.product_rating} className='my-1' /> <span className='text-muted'>({product.product_ratingCount})</span>
                                     </p>
                                 </Row>
                                 <Row className='my-2 '>

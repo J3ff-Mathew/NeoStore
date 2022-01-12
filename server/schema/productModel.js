@@ -23,6 +23,9 @@ const productSchema = new mongoose.Schema({
     product_rating: {
         type: Number
     },
+    product_ratingCount: {
+        type: Number
+    },
     color_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "color"

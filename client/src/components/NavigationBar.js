@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { disableLoginStatus, enableLoginStatus, updateCart, updateProfile } from '../redux/actions';
+import { disableLoginStatus, enableLoginStatus, updateCart, updateLoggedinCart, updateProfile } from '../redux/actions';
 import { addCart } from '../apiCalls/services';
 
 export default function NavigationBar() {
@@ -11,20 +11,40 @@ export default function NavigationBar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            return e.returnValue = ''
+
+        })
+        window.addEventListener('unload', addCartToDataBase());
+
         if (sessionStorage.getItem("user") != undefined) {
             dispatch(enableLoginStatus());
             dispatch(updateProfile());
+            dispatch(updateLoggedinCart());
+        }
+        return () => {
+            window.removeEventListener('beforeunload', (e) => {
+                e.preventDefault();
+                return e.returnValue = ''
+
+            })
+            window.removeEventListener('unload', addCartToDataBase())
         }
     }, [])
     const logOutUser = () => {
 
         dispatch(disableLoginStatus());
-        let cart = JSON.parse(sessionStorage.getItem('cart'));
-        let user = JSON.parse(sessionStorage.getItem('user'));
-        addCart(user.email, cart);
+        addCartToDataBase();
         sessionStorage.clear();
         navigate('/');
         dispatch(updateCart());
+    }
+
+    const addCartToDataBase = () => {
+        let cart = JSON.parse(sessionStorage.getItem('cart'));
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        addCart(user.email, cart);
     }
     return (
         <div>

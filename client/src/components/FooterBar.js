@@ -1,5 +1,6 @@
 import React from "react"
 import { FormControl, Form, Button } from 'react-bootstrap'
+import { FrontEndPath } from "../apiCalls/services"
 
 
 export default function FooterBar() {
@@ -27,11 +28,11 @@ export default function FooterBar() {
                     <div className="col-md-3 mb-md-0 mb-1">
                         <h5 className="text-uppercase">Information</h5>
                         <ul className="list-unstyled">
-                            <li>Terms and Conditions</li>
+                            <li><a href={`${FrontEndPath}/NeoStore_TermsAndCondition.pdf`} target="_blank">Terms and Conditions</a></li>
                             <li>Guarantee and Return policy</li>
                             <li>Contact Us</li>
                             <li>Privacy Policy</li>
-                            <li>Locate Us</li>
+                            <li> <a href="https://www.google.com/maps/place/NeoSOFT+Technologies/@18.5790021,73.7387793,15z/data=!4m2!3m1!1s0x0:0x316090d140dfd0b3?sa=X&ved=2ahUKEwjc_v_Q86j1AhWv-yoKHdXXCqwQ_BJ6BAg0EAU" target="_blank">Locate Us</a> </li>
                         </ul>
                     </div>
 
@@ -44,7 +45,7 @@ export default function FooterBar() {
                                     placeholder="Email ID"
                                     className="me-2"
                                 />
-                                <Button variant="outline-info" className="my-2">Submit</Button>
+                                <Button variant="outline-danger" className="my-2">Subscribe</Button>
                             </Form></li>
                         </ul>
                     </div>

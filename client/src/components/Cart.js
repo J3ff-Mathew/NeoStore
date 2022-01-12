@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Button, Alert } from 'react-bootstrap';
 import { updateCart, updateLoggedinCart } from '../redux/actions';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const list = useSelector(state => state.setCart);
     const loginStatus = useSelector(state => state.setLoginStatus);
     const [show, setShow] = useState({ alert: false, message: '' });
@@ -68,7 +70,9 @@ export default function Cart() {
         }
         loadData();
     }
-    const sendData = () => { }
+    const sendData = () => {
+        navigate('/checkout', { state: { total: gt } });
+    }
     return (
         <div>
             {show.alert && <Alert id="alert" variant="danger" onClose={() => setShow({ message: "", alert: false })} dismissible>
@@ -77,8 +81,8 @@ export default function Cart() {
                     {show.message}
                 </p>
             </Alert>}
-            {list != [] ?
-                <div>
+            {list.length != 0 ?
+                <div style={{ minHeight: "60vh" }}>
                     {list.map((ele, index) =>
                         <Card className="my-4" key={`ProductCart${index}`}>
                             <Card.Header as="h5">{ele.product_name}</Card.Header>
@@ -104,7 +108,11 @@ export default function Cart() {
                     </div>
                 </div>
                 :
-                <h1>No items in Cart</h1>
+                <div id="errorPage">
+                    <div className="fof">
+                        <h1>Your Cart is <span className='text-danger'>Empty</span>!!!!</h1>
+                    </div>
+                </div>
             }
         </div>
     )

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const userModel = require('../schema/userModel');
+const orderModel = require('../schema/orderModel');
 const validateToken = require("../Functions/validateToken");
 
 
@@ -55,6 +56,20 @@ addApi.post('/addCart/:email', (req, res) => {
     })
     // console.log(email, req.body)
 });
+
+
+addApi.post('/addOrder', validateToken, async (req, res) => {
+    console.log(req.body);
+    let insert = await new orderModel({ ...req.body });
+    insert.save((err) => {
+        if (err) {
+
+            console.log(err)
+        }
+        else
+            res.status(201).send({ msg: "Order Placed Sucessfully" });
+    });
+})
 
 
 module.exports = addApi;

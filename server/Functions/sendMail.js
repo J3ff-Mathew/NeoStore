@@ -15,8 +15,8 @@ const sendMail = (OTP, email) => {
     const mailData = {
         from: 'neosoftCoders@gmail.com',  // sender address
         to: email,   // list of receivers
-        subject: 'Pizza order reciept',
-        text: 'Pizza order Reciept',
+        subject: 'OTP Verification',
+        text: 'OTP for Account verification',
         html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" + OTP + "</h1>"
     };
     transporter.sendMail(mailData, (err, data) => {

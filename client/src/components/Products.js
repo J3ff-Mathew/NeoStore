@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
+
 import ReactPaginate from 'react-paginate'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getAllProducts, getCategoriesAndColors, getFilteredProducts } from '../apiCalls/services'
+import { FrontEndPath, getAllProducts, getCategoriesAndColors, getFilteredProducts } from '../apiCalls/services'
 import Rating from './Reusables/Rating';
 
 export default function Products() {
@@ -93,7 +94,7 @@ export default function Products() {
                         {currentItems.map((ele, index) =>
                             <Col key={`product${index}`} xs={12} md={6} lg={4} className='d-flex justify-content-center'>
                                 <Card style={{ width: "17rem", height: "30rem" }} className='text-center m-2' onClick={() => navigate(`/productDetail/${ele._id}`)}>
-                                    <Card.Img className='img img-center' variant="top" src={`./images/products/${ele.product_image}`} style={{ width: '100%', height: '17rem' }} />
+                                    <Card.Img className='img img-center' variant="top" src={`${FrontEndPath}/images/products/${ele.product_image}`} style={{ width: '100%', height: '17rem' }} />
                                     <Card.Body>
                                         <Card.Title className='text-danger' style={{ height: "3.5rem" }}>{ele.product_name}</Card.Title>
                                         <Card.Text style={{ height: "1rem" }}>

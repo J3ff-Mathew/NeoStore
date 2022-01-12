@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ProductPage from './components/Reusables/ProductPage';
+import { updateCart, updateLoggedinCart } from './redux/actions';
 import ChangePassword from './components/profile/ChangePassword';
 import ForgetPassword from './components/ForgetPassword/ForgetPassword';
 import VerifyOtp from './components/ForgetPassword/VerifyOtp';
 import SetNewPassword from './components/ForgetPassword/SetNewPassword';
-import { useDispatch, useSelector } from 'react-redux';
-import ProductPage from './components/Reusables/ProductPage';
-import { updateCart, updateLoggedinCart } from './redux/actions';
+import Mario from './components/Reusables/Mario1.gif'
+import CheckoutPage from './components/CheckoutPage';
+import Invoice from './components/Reusables/Invoice';
 const NavigationBar = React.lazy(() => import('./components/NavigationBar'));
 const FooterBar = React.lazy(() => import('./components/FooterBar'));
 const Registration = React.lazy(() => import('./components/Registration'));
@@ -35,7 +38,10 @@ function App() {
   }, []);
   return (
     <div >
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div className='d-flex justify-content-center align-items-center'>
+        <img src={Mario} alt="loading..." />
+
+      </div>}>
         <BrowserRouter>
           <NavigationBar />
           <Routes>
@@ -48,13 +54,19 @@ function App() {
             <Route path='/verifyOtp' exact element={<VerifyOtp />} />
             <Route path='/setNewPassword' exact element={<SetNewPassword />} />
             <Route path='/cart' exact element={<Cart />} />
+
             {loginStatus &&
-              <Route path='/profile' exact element={<Profile />}>
-                <Route path='' exact element={<HomeProfile />} />
-                <Route path='orders' exact element={<Orders />} />
-                <Route path='address' exact element={<Address />} />
-                <Route path='changePassword' exact element={<ChangePassword />} />
-              </Route>
+              <>
+                <Route path='/invoice/:id' exact element={<Invoice />} />
+                <Route path='/checkout' exact element={<CheckoutPage />} />
+                <Route path='/profile' exact element={<Profile />}>
+                  <Route path='' exact element={<HomeProfile />} />
+                  <Route path='orders' exact element={<Orders />} />
+                  <Route path='address' exact element={<Address />} />
+                  <Route path='changePassword' exact element={<ChangePassword />} />
+                </Route>
+              </>
+
             }
             <Route path="*" element={
               <div id="errorPage">

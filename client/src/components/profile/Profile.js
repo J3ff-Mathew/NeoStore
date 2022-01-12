@@ -4,6 +4,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from 'react-avatar';
 import { updateProfile } from '../../redux/actions';
+import { FrontEndPath } from '../../apiCalls/services';
 
 
 export default function Profile() {
@@ -18,7 +19,7 @@ export default function Profile() {
                 <Col xs={5}>
                     <Row xs={3} className='my-5 d-flex justify-content-center align-items-center' >
                         {userData.image != "" ?
-                            <img style={{ padding: 0, height: "170px", width: "170px", borderRadius: "50%" }} src={`http://localhost:3000/${userData.image}`} />
+                            <img style={{ padding: 0, height: "170px", width: "170px", borderRadius: "50%" }} src={(/platform/.test(userData.image) || /google/.test(userData.image)) ? userData.image : `${FrontEndPath}/${userData.image}`} />
                             :
                             <>
                                 <Avatar round size='170' color={Avatar.getRandomColor('sitebase', ['red', 'green', 'blue'])} name={userData.name} />

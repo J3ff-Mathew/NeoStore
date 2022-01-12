@@ -9,7 +9,9 @@ const userModel = require('../schema/userModel');
 const colorModel = require('../schema/colorModel');
 const categoryModel = require("../schema/categoryModel");
 const productModel = require("../schema/productModel");
+const orderModel = require("../schema/orderModel");
 const validateToken = require("../Functions/validateToken");
+
 
 
 
@@ -152,6 +154,34 @@ getApi.post('/getFilteredProducts', async (req, res) => {
         });
     }
 });
+
+
+getApi.get('/getOrder/:email', validateToken, (req, res) => {
+    const email = req.params.email;
+    console.log(email);
+    orderModel.find({ "buyer.email": email }, (err, data) => {
+        if (err)
+            throw err;
+        else
+            res.send(data)
+    })
+})
+
+
+getApi.get('/getSpecificOrder/:email/:id', validateToken, (req, res) => {
+    const email = req.params.email;
+    const id = req.params.id;
+    console.log('in getSpecificOrder');
+    orderModel.find({ "buyer.email": email, _id: id }, (err, data) => {
+        if (err)
+            throw err;
+        else {
+            console.log(data)
+            res.send(data)
+        }
+
+    })
+})
 
 
 

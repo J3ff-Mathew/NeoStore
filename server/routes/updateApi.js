@@ -30,7 +30,8 @@ updateApi.post('/updateUserDetails/:email', validateToken, upload.single('file')
         else {
             const imgPath = `images/${req.file.filename}`;
             let oldData = await userModel.findOneAndUpdate({ email: email }, { name: req.body.name, image: imgPath });
-            fs.unlinkSync(`../client/public/${oldData.image}`)
+            if (!(/platform/.test(oldData.image) || /google/.test(oldData.image)))
+                fs.unlinkSync(`../client/public/${oldData.image}`)
         }
     }
     userModel.findOne({ email: email }, (err, data) => {
