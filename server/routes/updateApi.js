@@ -12,8 +12,9 @@ const jwtSecretKey = "jeffffejjeffffej";
 
 const sendMail = require('../Functions/sendMail')
 const userModel = require('../schema/userModel');
+const productModel = require('../schema/productModel')
 const upload = require('../Functions/fileUpload');
-const validateToken = require('../Functions/validateToken')
+const validateToken = require('../Functions/validateToken');
 updateApi.use(express.static("../client/public/images/"));
 updateApi.use(express.json());
 updateApi.use(express.urlencoded({ extended: true }));
@@ -126,7 +127,22 @@ updateApi.put("/setUserPassword/:email", validateToken, (req, res) => {
             res.send(401, { err: 1, msg: "Bad Request cannot proces the Data" });
         }
     })
-})
+});
+
+
+updateApi.put('/updateRating/:id', (req, res) => {
+    const id = req.params.id;
+    const newRating = req.body.newRating;
+    const newRatingCount = req.body.newRatingCount;
+    productModel.findOneAndUpdate({ _id: id }, { product_rating: newRating, product_ratingCount: newRatingCount }, (err, data) => {
+        if (err) throw err;
+        else {
+            res.status(201).send({ msg: "Success" });
+            console.log("inside", data)
+        }
+
+    });
+});
 
 
 

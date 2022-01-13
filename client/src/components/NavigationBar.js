@@ -11,27 +11,34 @@ export default function NavigationBar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
-        window.addEventListener('beforeunload', (e) => {
-            e.preventDefault();
-            return e.returnValue = ''
 
-        })
-        window.addEventListener('unload', addCartToDataBase());
 
         if (sessionStorage.getItem("user") != undefined) {
             dispatch(enableLoginStatus());
             dispatch(updateProfile());
             dispatch(updateLoggedinCart());
         }
-        return () => {
-            window.removeEventListener('beforeunload', (e) => {
+
+    }, [])
+
+    useEffect(() => {
+        if (loginStatus) {
+            window.addEventListener('beforeunload', (e) => {
                 e.preventDefault();
                 return e.returnValue = ''
 
             })
-            window.removeEventListener('unload', addCartToDataBase())
+            window.addEventListener('unload', addCartToDataBase());
+            return () => {
+                window.removeEventListener('beforeunload', (e) => {
+                    e.preventDefault();
+                    return e.returnValue = ''
+
+                })
+                window.removeEventListener('unload', addCartToDataBase())
+            }
         }
-    }, [])
+    }, [loginStatus]);
     const logOutUser = () => {
 
         dispatch(disableLoginStatus());

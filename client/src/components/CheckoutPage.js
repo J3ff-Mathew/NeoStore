@@ -6,7 +6,6 @@ import { addCart, addOrder, getAddress } from '../apiCalls/services';
 import { updateLoggedinCart } from '../redux/actions';
 const regexForCardno = RegExp(/^[0-9]{16}$/);
 const regexForCvv = RegExp(/^([0-9]{3})$/);
-
 export default function CheckoutPage() {
     const location = useLocation();
     const navigate = useNavigate();

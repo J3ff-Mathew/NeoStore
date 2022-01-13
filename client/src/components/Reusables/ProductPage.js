@@ -15,15 +15,18 @@ import {
     TwitterIcon,
     RedditIcon
 } from 'react-share';
-import { FrontEndPath, getSpecificProducts } from '../../apiCalls/services';
+import { FrontEndPath, getSpecificProducts, updateRating } from '../../apiCalls/services';
 import { updateCart, updateLoggedinCart } from '../../redux/actions';
 import Rating from './Rating';
+import RatingInput from './RatingInput';
+
 
 export default function ProductPage() {
     const naviagte = useNavigate();
     const dispatch = useDispatch()
     const loginStatus = useSelector(state => state.setLoginStatus);
     const [product, setProduct] = useState(null);
+    const [rating, setRating] = useState({ display: false, value: 1 });
     const [show, setShow] = useState({ alert: false, message: '' });
     const [variable, setVariable] = useState({ focus: '', title: '' });
     const { id } = useParams();
@@ -97,7 +100,25 @@ export default function ProductPage() {
 
 
     }
-    const rateProduct = () => { }
+    const setRatingCount = (count) => {
+        setRating({ ...rating, value: count });
+        console.log(count)
+    }
+    const rateProduct = () => {
+        ///make api and complete the logic for rating component
+        const newRatingCount = product.product_ratingCount + 1;
+        const newRating = product.product_rating + (rating.value - product.product_rating) / newRatingCount;
+        const payload = {
+            newRatingCount: newRatingCount,
+            newRating: newRating
+        }
+        updateRating(product._id, payload).then(res => {
+            if (res.status === 201) {
+                setRating({ display: false, value: 1 });
+                setProduct({ ...product, product_rating: newRating, product_ratingCount: newRatingCount });
+            }
+        })
+    }
     return (
         <div>
             {product != null ?
@@ -125,9 +146,9 @@ export default function ProductPage() {
                             <Col s={12} md={6} lg={5} style={{ borderRight: "2px balck solid", padding: "0" }}>
                                 {/* //image */}
                                 <Row style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                    <p style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <Magnifier src={`${FrontEndPath}/images/products/${variable.focus}`} height="500px" />
-                                    </p>
+                                    </div>
                                 </Row>
                                 <Row >
                                     <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center", flexFlow: "row" }}>
@@ -168,8 +189,15 @@ export default function ProductPage() {
                                 </Row>
                                 <Row className='my-2 '>
                                     <p>
-                                        <Button variant="danger" onClick={() => addProductToCart()}>Add To Cart</Button>  <Button variant="warning" onClick={() => rateProduct()}>Rate Product</Button>
+                                        <Button variant="danger" onClick={() => addProductToCart()}>Add To Cart</Button>  <Button variant="warning" onClick={() => setRating({ ...rating, display: !rating.display })}>Rate Product</Button>
                                     </p>
+                                    {rating.display &&
+                                        <div>
+                                            Your Rating Is Valuable for other Customers!!!
+                                            <RatingInput ratingCount={rating.value} setRatingCount={setRatingCount} />
+                                            <Button variant='warning' onClick={() => rateProduct()}>Submit</Button>
+                                        </div>
+                                    }
                                 </Row>
                                 <Row className='my-2 '>
                                     <p>

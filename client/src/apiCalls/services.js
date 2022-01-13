@@ -43,7 +43,7 @@ export const getSpecificOrder = (email, id) => PATH.get(`/get/getSpecificOrder/$
 });
 
 
-//Edit Profile Links
+//update
 export const updateUserDetails = (email, data) => PATH.post(`/update/updateUserDetails/${email}`, data, {
     headers: {
         'content-type': 'multipart/form-data',
@@ -55,6 +55,8 @@ export const updatePassword = (email, data) => PATH.put(`/update/changePassword/
         'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
     }
 });
+
+export const updateRating = (id, data) => PATH.put(`/update/updateRating/${id}`, data);
 
 
 // forget Password Api Calls
