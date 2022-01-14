@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
-import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button, FormGroup, Collapse } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { disableLoginStatus, enableLoginStatus, updateCart, updateLoggedinCart, updateProfile } from '../redux/actions';
-import { addCart } from '../apiCalls/services';
+import { addCart, getSearch } from '../apiCalls/services';
 
 export default function NavigationBar() {
     const loginStatus = useSelector(state => state.setLoginStatus);
     const cart = useSelector(state => state.setCart);
+    const [searchBar, setSearchBar] = useState({ search: '', recommendations: [] });
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -19,26 +20,38 @@ export default function NavigationBar() {
             dispatch(updateLoggedinCart());
         }
 
-    }, [])
+    }, []);
+
 
     useEffect(() => {
-        if (loginStatus) {
-            window.addEventListener('beforeunload', (e) => {
-                e.preventDefault();
-                return e.returnValue = ''
-
-            })
-            window.addEventListener('unload', addCartToDataBase());
-            return () => {
-                window.removeEventListener('beforeunload', (e) => {
-                    e.preventDefault();
-                    return e.returnValue = ''
-
-                })
-                window.removeEventListener('unload', addCartToDataBase())
-            }
+        console.log('in search bar')
+        if (searchBar.search.length != 0) {
+            getSearch({ search: searchBar.search }).then(res => {
+                setSearchBar({ ...searchBar, recommendations: res.data });
+            });
         }
-    }, [loginStatus]);
+    }, [searchBar.search]);
+
+
+    // THIS IS AN EXPERIMENTAL FEATURE SO THAT IT SAVES USER CART ONTO THE BACKEND WHEN USER CLOSES THE TAB
+    // useEffect(() => {
+    //     if (loginStatus) {
+    //         window.addEventListener('beforeunload', (e) => {
+    //             e.preventDefault();
+    //             return e.returnValue = ''
+
+    //         })
+    //         window.addEventListener('unload', addCartToDataBase());
+    //         return () => {
+    //             window.removeEventListener('beforeunload', (e) => {
+    //                 e.preventDefault();
+    //                 return e.returnValue = ''
+
+    //             })
+    //             window.removeEventListener('unload', addCartToDataBase())
+    //         }
+    //     }
+    // }, [loginStatus]);
     const logOutUser = () => {
 
         dispatch(disableLoginStatus());
@@ -57,7 +70,7 @@ export default function NavigationBar() {
         <div>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="#home" style={{ fontSize: '2rem', fontWeight: '900' }}>Neo<span className='text-danger'>Store</span></Navbar.Brand>
+                    <Navbar.Brand style={{ fontSize: '2rem', fontWeight: '900' }}>Neo<span className='text-danger'>Store</span></Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
@@ -68,14 +81,32 @@ export default function NavigationBar() {
                         </Nav>
                         <Nav>
                             <Form className="d-flex">
-                                <FormControl
-                                    type="search"
-                                    placeholder="Search"
-                                    className="me-2"
-                                    aria-label="Search"
+                                <FormGroup className='position-relative'>
+                                    <div className='d-flex' style={{ minWidth: "max-content" }}>
+                                        <FormControl
+                                            type="search"
+                                            placeholder="Search"
+                                            className="me-2"
+                                            aria-label="Search"
+                                            onChange={(e) => setSearchBar({ ...searchBar, search: e.target.value })}
+                                        />
+                                        <Button variant="outline-success" >Search</Button>
+                                    </div>
+                                    {console.log(searchBar.recommendations)}
+                                    {searchBar.search.length > 0 &&
+                                        <Collapse className="position-absolute p-3 w-100" in={true} >
+                                            <div style={{ maxHeight: '25vh', overflow: 'auto', backgroundColor: "white", zIndex: 1 }}>
+                                                {
+                                                    searchBar.recommendations.map(ele =>
+                                                        <p className="" onClick={() => navigate(`/productDetail/${ele._id}`)}>&nbsp;{ele.product_name}</p >
+                                                    )
+                                                }
+                                            </div>
+                                        </Collapse>
+                                    }
 
-                                />
-                                <Button variant="outline-success">Search</Button>
+
+                                </FormGroup>
                             </Form>
                             <Nav.Link as={Link} to="/cart" style={{ marginLeft: '0.5rem' }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-cart4" viewBox="0 0 16 16">

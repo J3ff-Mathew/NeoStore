@@ -43,6 +43,9 @@ export const getSpecificOrder = (email, id) => PATH.get(`/get/getSpecificOrder/$
 });
 
 
+export const getSearch = (text) => PATH.post(`/get/getSearch`, text);
+
+
 //update
 export const updateUserDetails = (email, data) => PATH.post(`/update/updateUserDetails/${email}`, data, {
     headers: {

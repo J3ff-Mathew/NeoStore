@@ -45,7 +45,7 @@ export default function ProductPage() {
 
         });
 
-    }, []);
+    }, [id]);
 
     const addProductToCart = () => {
         if (!loginStatus) {
