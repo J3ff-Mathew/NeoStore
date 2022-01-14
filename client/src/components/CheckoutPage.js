@@ -58,7 +58,7 @@ export default function CheckoutPage() {
                     navigate('/', { state: { order: true } });
                     sessionStorage.setItem('cart', JSON.stringify([]));
                     dispatch(updateLoggedinCart());
-                    dispatch(addCart(userData.email, []));
+                    addCart(userData.email, []);
                 }
 
             });

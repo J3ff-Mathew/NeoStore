@@ -8,7 +8,8 @@ import { addCart, getSearch } from '../apiCalls/services';
 export default function NavigationBar() {
     const loginStatus = useSelector(state => state.setLoginStatus);
     const cart = useSelector(state => state.setCart);
-    const [searchBar, setSearchBar] = useState({ search: '', recommendations: [] });
+    const [searchBar, setSearchBar] = useState({ search: '' });
+    const [recommendations, setRecommendations] = useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -24,11 +25,15 @@ export default function NavigationBar() {
 
 
     useEffect(() => {
-        console.log('in search bar')
+        console.log('in search bar', searchBar)
         if (searchBar.search.length != 0) {
             getSearch({ search: searchBar.search }).then(res => {
-                setSearchBar({ ...searchBar, recommendations: res.data });
+                setRecommendations(res.data)
             });
+        }
+        else {
+            setRecommendations([]);
+
         }
     }, [searchBar.search]);
 
@@ -92,13 +97,17 @@ export default function NavigationBar() {
                                         />
                                         <Button variant="outline-success" >Search</Button>
                                     </div>
-                                    {console.log(searchBar.recommendations)}
                                     {searchBar.search.length > 0 &&
                                         <Collapse className="position-absolute p-3 w-100" in={true} >
                                             <div style={{ maxHeight: '25vh', overflow: 'auto', backgroundColor: "white", zIndex: 1 }}>
                                                 {
-                                                    searchBar.recommendations.map(ele =>
-                                                        <p className="" onClick={() => navigate(`/productDetail/${ele._id}`)}>&nbsp;{ele.product_name}</p >
+                                                    recommendations.map(ele =>
+                                                        <p className="" onClick={(e) => {
+                                                            navigate(`/productDetail/${ele._id}`);
+                                                            setRecommendations([]);
+                                                            setSearchBar({ search: '' });
+
+                                                        }}>&nbsp;{ele.product_name}</p >
                                                     )
                                                 }
                                             </div>

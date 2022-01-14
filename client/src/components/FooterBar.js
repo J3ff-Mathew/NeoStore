@@ -32,7 +32,7 @@ export default function FooterBar() {
                             <li>Guarantee and Return policy</li>
                             <li>Contact Us</li>
                             <li>Privacy Policy</li>
-                            <li> <a href="https://www.google.com/maps/place/NeoSOFT+Technologies/@18.5790021,73.7387793,15z/data=!4m2!3m1!1s0x0:0x316090d140dfd0b3?sa=X&ved=2ahUKEwjc_v_Q86j1AhWv-yoKHdXXCqwQ_BJ6BAg0EAU" target="_blank">Locate Us</a> </li>
+                            <li> <a href="https://www.google.com/maps/search/neosoft+technologies/@18.8371776,73.2505919,9.63z" target="_blank">Locate Us</a> </li>
                         </ul>
                     </div>
 

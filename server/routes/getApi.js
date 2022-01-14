@@ -186,7 +186,7 @@ getApi.get('/getSpecificOrder/:email/:id', validateToken, (req, res) => {
 
 getApi.post('/getSearch', (req, res) => {
     const text = req.body.search;
-    console.log(text);
+    // console.log(text);
     productModel.find({ product_name: { $regex: text, $options: '$i' } }).populate(['category_id', 'color_id'])
         .then(response => {
             res.json(response)
