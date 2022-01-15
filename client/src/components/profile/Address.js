@@ -47,6 +47,8 @@ export default function Address() {
                         refreshAddress();
                         setModalShow(false);
                         console.log('in address')
+                        setUpdateFlag({ flag: false, id: null });
+                        setinputDetails({ state: '', district: '', firstName: '', lastName: '', address: '', country: '', pincode: '', contact: '' });
                     }
                 });
             }
