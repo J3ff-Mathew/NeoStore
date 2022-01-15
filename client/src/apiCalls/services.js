@@ -62,6 +62,11 @@ export const updatePassword = (email, data) => PATH.put(`/update/changePassword/
 
 export const updateRating = (id, data) => PATH.put(`/update/updateRating/${id}`, data);
 
+export const updateAddress = (email, id, data) => PATH.put(`update/updateAddress/${email}/${id}`, data, {
+    headers: {
+        'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    }
+});
 
 // forget Password Api Calls
 export const forgotPasswordOtp = (email) => PATH.put(`/update/forgotPasswordOtp/${email}`);

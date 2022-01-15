@@ -145,6 +145,19 @@ updateApi.put('/updateRating/:id', (req, res) => {
 });
 
 
+updateApi.put('/updateAddress/:email/:id', validateToken, (req, res) => {
+
+    const email = req.params.email;
+    const id = req.params.id;
+    console.log(req.body, email, id)
+    userModel.findOneAndUpdate({ email: email, "address._id": id }, { $set: { "address.$.name": req.body.name, "address.$.address": req.body.address, "address.$.contact": req.body.contact } }, (err, data) => {
+        if (err) throw err;
+        console.log("send data", data);
+        res.send({ err: 0, status: "success" })
+    })
+});
+
+
 
 
 

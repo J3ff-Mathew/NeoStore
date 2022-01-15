@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Alert, Button, Modal, Form, Row, Col, Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { addAddress, deleteUserAddress, getAddress } from '../../apiCalls/services';
+import { addAddress, deleteUserAddress, getAddress, updateAddress } from '../../apiCalls/services';
 const regexname = RegExp(/^[A-Za-z]{2,30}$/);
 const regexpin = RegExp("\\d{6}");
 const regexphone = RegExp(/^[987][0-9]{9}$/);
@@ -11,6 +11,7 @@ export default function Address() {
     const [error, setError] = useState({ name: "", address: "", location: '', pincode: '', contact: '' });
     const data = useSelector(state => state.setUserProfile);
     const [address, setAddress] = useState([]);
+    const [updateFlag, setUpdateFlag] = useState({ flag: false, id: null });
     const [show, setShow] = useState({ alert: false, message: '' });
     const refreshAddress = () => {
         getAddress(data.email).then(res => {
@@ -39,12 +40,25 @@ export default function Address() {
                 contact: inputDetails.contact
             }
             console.log(payload)
-            addAddress(data.email, payload).then(res => {
-                if (res.data.err == 0) {
-                    refreshAddress();
-                    setModalShow(false);
-                }
-            });
+            if (updateFlag.flag) {
+                console.log('in address')
+                updateAddress(data.email, updateFlag.id, payload).then(res => {
+                    if (res.data.err == 0) {
+                        refreshAddress();
+                        setModalShow(false);
+                        console.log('in address')
+                    }
+                });
+            }
+            else {
+                addAddress(data.email, payload).then(res => {
+                    if (res.data.err == 0) {
+                        refreshAddress();
+                        setModalShow(false);
+                    }
+                });
+            }
+
         }
 
     }
@@ -58,6 +72,38 @@ export default function Address() {
             }
         });
 
+    }
+
+    const editAddress = (element) => {
+        setModalShow(true);
+        setUpdateFlag({ flag: true, id: element._id });
+        const address = element.address.split(", ");
+        const [country, pincode] = address.pop().split(' - ');
+        const state = address.pop();
+        const district = address.pop();
+        const streetAddress = address.join(", ");
+        setinputDetails({
+            firstName: element.name.split(" ")[0],
+            lastName: element.name.split(" ")[1],
+            contact: element.contact,
+            state: state,
+            district: district,
+            address: streetAddress,
+            country: country,
+            pincode: pincode
+        })
+
+    }
+    const renderData = () => {
+        console.log(inputDetails)
+        document.getElementById("firstName").value = inputDetails.firstName;
+        document.getElementById("lastName").value = inputDetails.lastName;
+        document.getElementById("address").value = inputDetails.address;
+        document.getElementById("district").value = inputDetails.district;
+        document.getElementById("state").value = inputDetails.state;
+        document.getElementById("country").value = inputDetails.country;
+        document.getElementById("pincode").value = inputDetails.pincode;
+        document.getElementById("contact").value = inputDetails.contact;
     }
     return (
         <div>
@@ -75,7 +121,7 @@ export default function Address() {
                                 <Card.Body>
                                     <blockquote className="blockquote mb-0" style={{ fontSize: "0.8rem" }}>
                                         <Row>
-                                            <Col xs={10}>
+                                            <Col xs={8}>
                                                 <p>
                                                     {ele.address}
                                                 </p>
@@ -83,8 +129,15 @@ export default function Address() {
                                                     {ele.contact}
                                                 </footer>
                                             </Col>
-                                            <Col xs={1}>
-                                                <Button variant='danger' onClick={() => deleteAddress(ele._id)}>Delete</Button>
+                                            <Col xs={4}>
+                                                <Row>
+                                                    <Col xs={{ span: 4, offset: 2 }}>
+                                                        <Button variant='danger' onClick={() => deleteAddress(ele._id)}>Delete</Button>
+                                                    </Col>
+                                                    <Col xs={{ span: 4, offset: 2 }}>
+                                                        <Button variant='primary' onClick={() => editAddress(ele)}>Edit</Button>
+                                                    </Col>
+                                                </Row>
                                             </Col>
                                         </Row>
                                     </blockquote>
@@ -95,10 +148,14 @@ export default function Address() {
                 </div>
             </Container>
             <Modal
-
+                onShow={() => renderData()}
                 style={{ padding: 0 }}
                 show={modalShow}
-                onHide={() => { setModalShow(false); setError({ name: "", address: "", location: '', pincode: '', contact: '' }) }}
+                onHide={() => {
+                    setModalShow(false);
+                    setError({ name: "", address: "", location: '', pincode: '', contact: '' });
+                    setinputDetails({ state: '', district: '', firstName: '', lastName: '', address: '', country: '', pincode: '', contact: '' });
+                }}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
@@ -186,7 +243,7 @@ export default function Address() {
                         <Col>
                             <Form.Group className="mb-3" >
                                 <Form.Label>Contact No</Form.Label>
-                                <Form.Control type="text" id='address' placeholder="Enter Contact Info" onChange={e => setinputDetails({ ...inputDetails, contact: e.target.value })} />
+                                <Form.Control type="text" id='contact' placeholder="Enter Contact Info" onChange={e => setinputDetails({ ...inputDetails, contact: e.target.value })} />
                             </Form.Group>
                             <Row className="mb-3">
                                 <Form.Text className="text-danger">
