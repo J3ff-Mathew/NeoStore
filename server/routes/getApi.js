@@ -187,10 +187,16 @@ getApi.get('/getSpecificOrder/:email/:id', validateToken, (req, res) => {
 getApi.post('/getSearch', (req, res) => {
     const text = req.body.search;
     // console.log(text);
-    productModel.find({ product_name: { $regex: text, $options: '$i' } }).populate(['category_id', 'color_id'])
-        .then(response => {
-            res.json(response)
+    productModel.find({ product_name: { $regex: text, $options: '$i' } })
+        .then(product => {
+            res.json(product)
         })
+})
+getApi.get('/getTopRatedProducts', (req, res) => {
+    // console.log("in products")
+    productModel.find({}).sort({ product_rating: -1 }).limit(4)
+        .then(product => res.json(product))
+        .catch(err => res.send({ err: 1, msg: err }));
 })
 
 

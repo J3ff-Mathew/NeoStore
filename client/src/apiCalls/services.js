@@ -44,6 +44,7 @@ export const getSpecificOrder = (email, id) => PATH.get(`/get/getSpecificOrder/$
 
 
 export const getSearch = (text) => PATH.post(`/get/getSearch`, text);
+export const getTopRatedProducts = () => PATH.get(`/get/getTopRatedProducts`);
 
 
 //update

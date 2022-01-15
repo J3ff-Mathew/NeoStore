@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ProductPage from './components/Reusables/ProductPage';
+import Mario from './components/Reusables/Mario1.gif';
 import { updateCart, updateLoggedinCart } from './redux/actions';
-import ChangePassword from './components/profile/ChangePassword';
-import ForgetPassword from './components/ForgetPassword/ForgetPassword';
-import VerifyOtp from './components/ForgetPassword/VerifyOtp';
-import SetNewPassword from './components/ForgetPassword/SetNewPassword';
-import Mario from './components/Reusables/Mario1.gif'
-import CheckoutPage from './components/CheckoutPage';
-import Invoice from './components/Reusables/Invoice';
+const Invoice = React.lazy(() => import('./components/Reusables/Invoice'));
+const CheckoutPage = React.lazy(() => import('./components/CheckoutPage'));
+const SetNewPassword = React.lazy(() => import('./components/ForgetPassword/SetNewPassword'));
+const VerifyOtp = React.lazy(() => import('./components/ForgetPassword/VerifyOtp'));
+const ForgetPassword = React.lazy(() => import('./components/ForgetPassword/ForgetPassword'));
+const ChangePassword = React.lazy(() => import('./components/profile/ChangePassword'));
+const ProductPage = React.lazy(() => import('./components/Reusables/ProductPage'));
 const NavigationBar = React.lazy(() => import('./components/NavigationBar'));
 const FooterBar = React.lazy(() => import('./components/FooterBar'));
 const Registration = React.lazy(() => import('./components/Registration'));

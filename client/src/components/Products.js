@@ -3,12 +3,13 @@ import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 
 import ReactPaginate from 'react-paginate'
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FrontEndPath, getAllProducts, getCategoriesAndColors, getFilteredProducts } from '../apiCalls/services'
 import Rating from './Reusables/Rating';
 
 export default function Products() {
     const navigate = useNavigate();
+    const location = useLocation();
     const loginStatus = useSelector(state => state.setLoginStatus);
     const [products, setProducts] = useState([]);
     const [colors, setColors] = useState([]);

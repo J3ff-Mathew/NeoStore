@@ -33,7 +33,6 @@ export default function NavigationBar() {
         }
         else {
             setRecommendations([]);
-
         }
     }, [searchBar.search]);
 
@@ -71,6 +70,12 @@ export default function NavigationBar() {
         let user = JSON.parse(sessionStorage.getItem('user'));
         addCart(user.email, cart);
     }
+
+
+
+    // const searchProducts = () => {
+    //     navigate('/products', { state: recommendations })
+    // }
     return (
         <div>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -95,7 +100,7 @@ export default function NavigationBar() {
                                             aria-label="Search"
                                             onChange={(e) => setSearchBar({ ...searchBar, search: e.target.value })}
                                         />
-                                        <Button variant="outline-success" >Search</Button>
+                                        {/* <Button variant="outline-success" onClick={() => searchProducts()}>Search</Button> */}
                                     </div>
                                     {searchBar.search.length > 0 &&
                                         <Collapse className="position-absolute p-3 w-100" in={true} >
