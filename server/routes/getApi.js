@@ -113,7 +113,7 @@ getApi.get('/getSpecificProducts/:id', (req, res) => {
 
 
 getApi.get('/getCart/:email', (req, res) => {
-    console.log('in cart')
+    // console.log('in cart')
     const email = req.params.email;
     userModel.find({ email: email }, { cart: 1, _id: 0 }, (err, data) => {
         if (err) throw err;
@@ -136,13 +136,13 @@ getApi.get('/getCategoriesAndColors', async (req, res) => {
 getApi.post('/getFilteredProducts', async (req, res) => {
     const data = req.body;
     if (data.category != '' && data.colorFilter.toString() != []) {
-        console.log("both true")
+        // console.log("both true")
         productModel.find({ color_id: req.body.colorFilter, category_id: req.body.category }).populate(["color_id", "category_id"]).then(product => {
             res.send(product)
         });
     }
     else if (data.category != '') {
-        console.log("hello");
+        // console.log("hello");
         productModel.find({ category_id: req.body.category }).populate(["color_id", "category_id"]).then(product => {
             res.send(product)
         });
@@ -158,7 +158,7 @@ getApi.post('/getFilteredProducts', async (req, res) => {
 
 getApi.get('/getOrder/:email', validateToken, (req, res) => {
     const email = req.params.email;
-    console.log(email);
+    // console.log(email);
     orderModel.find({ "buyer.email": email }, (err, data) => {
         if (err)
             throw err;
@@ -171,7 +171,7 @@ getApi.get('/getOrder/:email', validateToken, (req, res) => {
 getApi.get('/getSpecificOrder/:email/:id', validateToken, (req, res) => {
     const email = req.params.email;
     const id = req.params.id;
-    console.log('in getSpecificOrder');
+    // console.log('in getSpecificOrder');
     orderModel.find({ "buyer.email": email, _id: id }, (err, data) => {
         if (err)
             throw err;

@@ -5,9 +5,9 @@ const validateToken = async (req, res, next) => {
     if (req.headers['authorization']) {
         let authHeader = await req.headers['authorization'];
         authHeader = authHeader.split(' ');
-        console.log(authHeader)
+        // console.log(authHeader)
         let token = authHeader[1]
-        console.log(token);
+        // console.log(token);
         if (token != undefined) {
             jwt.verify(token, jwtSecretKey, (err, data) => {
                 if (err) {
@@ -15,7 +15,7 @@ const validateToken = async (req, res, next) => {
                     res.json({ err: 1, message: "Token not valid" });
                 }
                 else {
-                    console.log("token valid", data)
+                    // console.log("token valid", data)
                     next();
                 }
             })
